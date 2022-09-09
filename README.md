@@ -1,6 +1,6 @@
 # BRIND
-This repository shares configured data and augmentation code for [BRIND](https://github.com/MengyangPu/RINDNet)---Berkeley Reflectance, Illuminance, Normal, and Depth edges annotations,
-which is a dataset for edge detection annotated by @MengyangPu from
+This repository shares configured data and augmentation code for BRIND---Berkeley Reflectance, Illuminance, Normal, and Depth edges annotations,
+which is a dataset for edge detection annotated by @MengyangPu---[RINDNet](https://github.com/MengyangPu/RINDNet) from
 the [BSDS](https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/) images.
 
 # Clarification
