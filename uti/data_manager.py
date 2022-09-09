@@ -1,6 +1,5 @@
 """
-This python code attempt to change the name of a list of files in a directory
-
+A draft code
 """
 import numpy as np
 import os
