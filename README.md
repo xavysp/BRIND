@@ -44,3 +44,4 @@ RINDNet publication:
     pages     = {6879-6888}
 }
 ```
+ If you want to contribute in the augmentation of this dataset, please, let me know.
