@@ -42,7 +42,8 @@ def data_list_maker(img_dir='train_imgs/aug', gt_dir='train_gt/aug', dataset_nam
     # save files
     print(os.path.join(img_dirs + '/' + file_name + '.jpg'))
     print(os.path.join(gt_base_dir + '/' + dir_name + '/' + file_name + '.png'))
-    save_path = 'train_pair.lst'
+    # save_path = 'train_pair.lst' # less data
+    save_path = 'train_pair_all.lst' # all BIRND data
     with open(save_path, 'w') as txtfile:
         json.dump(files_idcs, txtfile)
 
@@ -72,16 +73,16 @@ if __name__ == '__main__':
 
     base_dir = None
     dataset = 'BRIND'
-    augment_both = True  # to augment the input and target
-    augment_brind(base_dir=base_dir, augment_both=augment_both, use_all_augs=True)
+    # augment_both = True  # to augment the input and target
+    # augment_brind(base_dir=base_dir, augment_both=augment_both, use_all_augs=True)
 
     # List maker
     print("Dataset list maker is going to run in 10 sec.")
     time.sleep(10)
 
     dataset_name = 'BRIND'
-    img_base_dir = 'train_imgs/aug'
-    gt_base_dir = 'train_gt/aug'
+    img_base_dir = 'train_imgs/aug_all' # all data
+    gt_base_dir = 'train_gt/aug_all'
 
     data_list_maker(img_dir=img_base_dir,gt_dir=gt_base_dir)
 
