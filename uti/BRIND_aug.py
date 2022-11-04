@@ -321,14 +321,14 @@ def rotated_img_extractor(x=None, gt=None,img_width=None, img_height=None,i=None
                     rot_x = rot_x[115:img_size - 105, 390:img_size + 170, :]
         return rot_x, None
 
-def split_data(data_dir,augment_both=True):
+def split_data(data_dir,data_source,augment_both=True):
     # split data and copy real image to aug dir
     img_dir = data_dir[0]
     gt_dir = data_dir[1]
-    img_aug_dir= os.path.join(img_dir,'aug')
+    img_aug_dir= os.path.join(img_dir,data_source)
     _=make_dirs(img_aug_dir)
     if augment_both and gt_dir is not None:
-        gt_aug_dir = os.path.join(gt_dir,'aug')
+        gt_aug_dir = os.path.join(gt_dir,data_source)
         _ = make_dirs(gt_aug_dir)
     elif not augment_both and gt_dir is not None:
         raise NotImplementedError('In single augmentation')
@@ -663,12 +663,19 @@ def scale_data(data_dir,augment_both=True):
     print("... Scaling augmentation has finished")
 
 #  main tool for dataset augmentation
-def augment_brind(base_dir,augment_both, use_all_augs=True):
+def augment_brind(base_dir,augment_both,use_all_data, use_all_augs=True):
 
     print('=========== Data augmentation just for 720x1280 image size ==============')
     augment_gt = True # just for augmenting ne data type (rgb or gt)
     data_dir = base_dir
-
+    if use_all_data:
+        data_source = 'aug_all'
+        img0_dir = 'imgs_all'
+        gt0_dir = 'gt_all'
+    else:
+        data_source = 'aug'
+        img0_dir = 'imgs'
+        gt0_dir = 'gt'
 
     splitting_up = False#use_all_augs #use_all_type True to augment by splitting up
     rotation = use_all_augs
@@ -693,24 +700,23 @@ def augment_brind(base_dir,augment_both, use_all_augs=True):
     # *********** starting data augmentation *********
     if splitting_up:
         print("Image augmentation by splitting up have started!")
-        dataset_dirs = split_data(data_dir=dataset_dirs,augment_both=augment_both)
+        dataset_dirs = split_data(data_dir=dataset_dirs,data_source=data_source,augment_both=augment_both)
         splitting_up =False
     else:
-        img_aug_dir = os.path.join(img_dir,'aug')
+        img_aug_dir = os.path.join(img_dir,data_source)
         if os.path.exists(img_aug_dir):
             shutil.rmtree(img_aug_dir)
         _ = make_dirs(img_aug_dir)
         gt_aug_dir = None
         if augment_both and gt_dir is not None:
-            gt_aug_dir = os.path.join(gt_dir, 'aug')
+            gt_aug_dir = os.path.join(gt_dir, data_source)
             if os.path.exists(gt_aug_dir):
                 shutil.rmtree(gt_aug_dir)
             _ = make_dirs(gt_aug_dir)
         dataset_dirs = [img_aug_dir, gt_aug_dir]
-
-        shutil.copytree(os.path.join(img_dir, 'imgs'), img_aug_dir + '/real')
+        shutil.copytree(os.path.join(img_dir, img0_dir), img_aug_dir + '/real')
         if augment_both:
-            shutil.copytree(os.path.join(gt_dir, 'gt'), gt_aug_dir + '/real')
+            shutil.copytree(os.path.join(gt_dir, gt0_dir), gt_aug_dir + '/real')
 
     if rotation:
         print("Image augmentation by rotation has started!")

@@ -15,7 +15,7 @@ from uti.utls import *
 
 IS_LINUX = True if platform.system()=='Linux' else False
 
-def data_list_maker(img_dir='train_imgs/aug', gt_dir='train_gt/aug', dataset_name='BRIND'):
+def data_list_maker(img_dir='train_imgs/aug', gt_dir='train_gt/aug',use_all_data=None, dataset_name='BRIND'):
 
 
     img_base_dir =img_dir
@@ -43,7 +43,8 @@ def data_list_maker(img_dir='train_imgs/aug', gt_dir='train_gt/aug', dataset_nam
     print(os.path.join(img_dirs + '/' + file_name + '.jpg'))
     print(os.path.join(gt_base_dir + '/' + dir_name + '/' + file_name + '.png'))
     # save_path = 'train_pair.lst' # less data
-    save_path = 'train_pair_all.lst' # all BIRND data
+
+    save_path = 'train_pair_all.lst' if use_all_data else 'train_pair.lst'# all BIRND data
     with open(save_path, 'w') as txtfile:
         json.dump(files_idcs, txtfile)
 
@@ -73,17 +74,23 @@ if __name__ == '__main__':
 
     base_dir = None
     dataset = 'BRIND'
-    # augment_both = True  # to augment the input and target
-    # augment_brind(base_dir=base_dir, augment_both=augment_both, use_all_augs=True)
+    augment_both = True  # to augment the input and target
+    use_all_data = True # for the whole BIRND data, False just a part of BIRND data
+    augment_brind(base_dir=base_dir, augment_both=augment_both,
+                  use_all_data=use_all_data, use_all_augs=True)
 
     # List maker
     print("Dataset list maker is going to run in 10 sec.")
     time.sleep(10)
 
     dataset_name = 'BRIND'
-    img_base_dir = 'train_imgs/aug_all' # all data
-    gt_base_dir = 'train_gt/aug_all'
+    if use_all_data:
+        img_base_dir = 'train_imgs/aug_all' # all data
+        gt_base_dir = 'train_gt/aug_all'
+    else:
+        img_base_dir = 'train_imgs/aug'  # all data
+        gt_base_dir = 'train_gt/aug'
 
-    data_list_maker(img_dir=img_base_dir,gt_dir=gt_base_dir)
+    data_list_maker(img_dir=img_base_dir,gt_dir=gt_base_dir,use_all_data=use_all_data)
 
 
